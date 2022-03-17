@@ -8,7 +8,14 @@
 import Foundation
 import UIKit
 
+protocol HomeViewDelegate: AnyObject {
+    func didTapLoginButton()
+    func didTapRegisterButton()
+}
+
 public class HomeView: UIView {
+    
+    weak var delegate: HomeViewDelegate?
     
     var background: UIImageView = {
         let backgroundImage = "background.png"
@@ -44,6 +51,7 @@ public class HomeView: UIView {
         view.setTitle("ENTRAR", for: .normal)
         view.layer.cornerRadius = 26.0
         view.translatesAutoresizingMaskIntoConstraints = false
+        view.addTarget(self, action: #selector(didTapLoginButton), for: .touchUpInside)
         return view
     }()
    
@@ -55,6 +63,7 @@ public class HomeView: UIView {
         view.setTitle("CADASTRAR", for: .normal)
         view.layer.cornerRadius = 26.0
         view.translatesAutoresizingMaskIntoConstraints = false
+        view.addTarget(self, action: #selector(didTapRegisterButton), for: .touchUpInside)
         return view
     }()
     
@@ -94,6 +103,16 @@ public class HomeView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
+    @objc private func didTapLoginButton() {
+        print("didTapLoginButton on HomeView")
+        delegate?.didTapLoginButton()
+    }
+    
+    @objc private func didTapRegisterButton() {
+        print("didTapRegisterButton on HomeView")
+        delegate?.didTapRegisterButton()
+    }
+
 }
 
 extension HomeView: CodeView {
@@ -127,11 +146,12 @@ extension HomeView: CodeView {
         NSLayoutConstraint.activate([
             buttonStackView.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 87),
             buttonStackView.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -87),
-            buttonStackView.heightAnchor.constraint(equalToConstant: 130),
-            buttonStackView.bottomAnchor.constraint(equalTo: self.labelStackView.bottomAnchor, constant: -36)
+            buttonStackView.heightAnchor.constraint(greaterThanOrEqualToConstant: 130),
+            
         ])
         
         NSLayoutConstraint.activate([
+            labelStackView.topAnchor.constraint(equalTo: self.buttonStackView.bottomAnchor, constant: 25),
             labelStackView.centerXAnchor.constraint(equalTo: self.centerXAnchor),
             labelStackView.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: -70)
         ])

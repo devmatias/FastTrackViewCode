@@ -9,7 +9,7 @@ import UIKit
 
 class RegisterViewController: UIViewController {
 
-    let screen = RegisterViewControllerScreen()
+    let screen = RegisterView()
     
     override func loadView() {
         
@@ -19,13 +19,23 @@ class RegisterViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         title = "CADASTRE SUA CONTA"
-        screen.entrarButton.addTarget(self, action: #selector(didTapLoginButton), for: .touchUpInside)
+        screen.delegate = self
     }
     
-    @objc private func didTapLoginButton() {
-        
-        navigationController?.popViewController(animated: true)
-    }
-
-
 }
+
+extension RegisterViewController: RegisterViewDelegate {
+    func didTapLoginButton() {
+        let loginVC = LoginViewController()
+        navigationController?.pushViewController(loginVC, animated: true)
+//        for controller in self.navigationController!.viewControllers as Array {
+//            if controller.isKind(of: LoginViewController.self) {
+//                self.navigationController!.popToViewController(controller, animated: true)
+//                break
+//            }
+//        }
+
+    }
+}
+
+

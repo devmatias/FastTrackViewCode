@@ -9,12 +9,10 @@ import UIKit
 
 class HomeViewController: UIViewController {
 
-    let screen = HomeView()
-    let loginScreen = LoginViewControllerScreen()
-    let registerScreen = RegisterViewControllerScreen()
-    let forgotPasswordScreen = ForgotPasswordViewControllerScreen()
+    let screen: HomeView
     
     init() {
+        screen = HomeView()
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -28,31 +26,21 @@ class HomeViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        setupButtons()
-        setupNavigationBar()
-    }
-    
-    @objc private func didTapLoginButton() {
-        let screen = LoginViewController()
-        navigationController?.pushViewController(screen, animated: true)
-    }
-    
-    @objc private func didTapRegisterButton() {
-        let screen = RegisterViewController()
-        navigationController?.pushViewController(screen, animated: true)
-    }
-
-    func setupNavigationBar() {
-        let navigation = UINavigationBar.appearance()
-        let navigationFont = UIFont.systemFont(ofSize: 12, weight: .light)
-        navigation.titleTextAttributes = [NSAttributedString.Key.font: navigationFont]
-    }
-    
-    func setupButtons() {
-        screen.buttonEntrar.addTarget(self, action: #selector(didTapLoginButton), for: .touchUpInside)
-        screen.buttonCadastrar.addTarget(self, action: #selector(didTapRegisterButton), for: .touchUpInside)
+        screen.delegate = self
     }
     
 }
 
-
+extension HomeViewController: HomeViewDelegate {
+    func didTapLoginButton() {
+        let loginVC = LoginViewController()
+        navigationController?.pushViewController(loginVC, animated: true)
+        print("didTapLoginButton on Controller")
+    }
+    
+    func didTapRegisterButton() {
+        let registerVC = RegisterViewController()
+        navigationController?.pushViewController(registerVC, animated: true)
+        print("didTapRegisterButton on Controller")
+    }
+}
